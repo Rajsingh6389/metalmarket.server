@@ -27,7 +27,7 @@ public class DataLoader {
                 productRepo.save(new Product(null, "Copper", "Metal", 140.0, 100, "Copper is a reddish-brown metal, excellent conductor of electricity and heat, used in electrical wiring, plumbing, electronics, etc. Higher value than common ferrous metals.",copper ));
 
             }
-            if (!userRepo.existsByEmail("admin@mm.com")) {
+            if (!userRepo.existsByEmail("MetalMarket92@gmail.com")) {
                 User admin = new User();
                 admin.setName("MetalMarket");
                 admin.setEmail("MetalMarket92@gmail.com");
