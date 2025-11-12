@@ -14,15 +14,17 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173"
-                        ,"https://arsh341.netlify.app"
-                        ,"https://metalmarketin.in"
-                        ,"https://metalmarketin.com"
-                        // 
+                        .allowedOrigins(
+                                "http://localhost:5173",
+                                "https://arsh341.netlify.app",
+                                "https://metalmarketin.in",
+                                "https://metalmarketin.com",
+                                "https://metalmarketserver-production.up.railway.app"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true);
+                        .allowCredentials(true)
+                        .maxAge(3600); // Cache preflight response for 1 hour
             }
         };
     }

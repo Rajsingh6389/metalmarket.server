@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -34,7 +35,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // Add authentication provider with UserDetailsService + PasswordEncoder
+    // Authentication provider (links UserDetailsService + PasswordEncoder)
     @Bean
     public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -51,13 +52,30 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                // ✅ Enable CORS so it uses your CorsConfig.java
+                .cors(Customizer.withDefaults())
+
+                // ❌ Disable CSRF for stateless APIs
                 .csrf(csrf -> csrf.disable())
+
+                // ✅ Allow only these endpoints publicly
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/products/**", "/h2-console/**").permitAll()
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/api/products/**",
+                                "/health",
+                                "/h2-console/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+                // ✅ Set JWT-based stateless session
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // ✅ Link authentication provider
+                .authenticationProvider(authProvider());
+
+        // ✅ Add JWT filter before UsernamePasswordAuthenticationFilter
         http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
