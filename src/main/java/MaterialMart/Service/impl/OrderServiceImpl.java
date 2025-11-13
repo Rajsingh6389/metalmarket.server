@@ -56,6 +56,13 @@ public class OrderServiceImpl implements OrderService {
         order.setCreatedAt(java.time.LocalDateTime.now());
         return orderRepo.save(order);
     }
+    public OrderEntity cancelOrder(Long orderId) {
+        OrderEntity order = orderRepo.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId));
+
+        order.setStatus("Cancelled");
+        return orderRepo.save(order); // ✅ User side will see this status
+    }
 
     @Override
     public List<OrderEntity> getOrdersByUser(Long userId) {

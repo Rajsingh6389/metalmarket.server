@@ -21,6 +21,10 @@ public class OrderController {
 
         return ResponseEntity.ok(svc.placeOrder(req));
     }
+    @PutMapping("/{orderId}/cancel")
+    public ResponseEntity<OrderEntity> cancelOrder(@PathVariable Long orderId) {
+        return ResponseEntity.ok(svc.cancelOrder(orderId));
+    }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<OrderEntity>> byUser(@PathVariable("userId") Long userId) {

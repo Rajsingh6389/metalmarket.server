@@ -11,4 +11,5 @@ public interface OrderService {
     List<OrderEntity> getOrdersByUser(Long userId);
     List<OrderEntity> getAllOrders();
     OrderEntity updateStatus(Long orderId, String status);
+    OrderEntity cancelOrder(Long orderId);//
 }
