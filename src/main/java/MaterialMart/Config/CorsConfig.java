@@ -18,7 +18,9 @@ public class CorsConfig {
                                 "http://localhost:5173",
                                 "https://arsh341.netlify.app",
                                 "https://metalmarketin.in",
+                                 "https://www.metalmarketin.in",
                                 "https://metalmarketin.com",
+                                 "https://www.metalmarketin.com",
                                 "https://metalmarketserver-production.up.railway.app"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
