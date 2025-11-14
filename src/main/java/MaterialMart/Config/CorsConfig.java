@@ -13,19 +13,21 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
+                registry.addMapping("/")
                         .allowedOrigins(
                                 "http://localhost:5173",
                                 "https://arsh341.netlify.app",
                                 "https://metalmarketin.in",
+                                "https://www.metalmarketin.in",  // Added www version
                                 "https://metalmarketin.com",
+                                "https://www.metalmarketin.com", // Added www version
                                 "https://metalmarketserver-production.up.railway.app"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true)
-                        .maxAge(3600); // Cache preflight response for 1 hour
+                        .maxAge(3600);
             }
-        };
-    }
+        };
+    }
 }
