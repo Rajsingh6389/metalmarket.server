@@ -28,6 +28,6 @@ public class CorsConfig {
                         .allowCredentials(true)
                         .maxAge(3600);
             }
-        };
-    }
+        };
+    }
 }
