@@ -12,8 +12,8 @@ COPY src src
 
 RUN chmod +x mvnw
 
-# Build the Spring Boot JAR
-RUN ./mvnw clean package -DskipTests
+# Build + Repackage to create executable jar
+RUN ./mvnw clean package spring-boot:repackage -DskipTests
 
 
 # ============================
@@ -23,7 +23,7 @@ FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/*.jar app.jar   # executable JAR
 
 EXPOSE 8080
 
