@@ -1,38 +1,30 @@
 # ============================
-# Stage 1: Build Spring Boot App using Maven
+# BUILD STAGE
 # ============================
-FROM eclipse-temurin:17-jdk-focal AS builder
+FROM eclipse-temurin:21 AS build
 
 WORKDIR /app
 
-# Copy Maven wrapper (if present)
 COPY mvnw .
 COPY .mvn .mvn
-
-# Copy pom.xml first (dependency cache)
 COPY pom.xml .
-
-# Download dependencies (for cache efficiency)
-RUN chmod +x mvnw
-RUN ./mvnw dependency:go-offline
-
-# Copy the rest of the source
 COPY src src
 
-# Build the JAR (skip tests to speed up)
+RUN chmod +x mvnw
+
+# Build the Spring Boot JAR
 RUN ./mvnw clean package -DskipTests
 
+
 # ============================
-# Stage 2: Run App (Lightweight Image)
+# RUN STAGE
 # ============================
-FROM eclipse-temurin:17-jre-focal
+FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
-# Copy JAR built in stage 1
-COPY --from=builder /app/target/*.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
-# Render sets a random PORT environment variable
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
