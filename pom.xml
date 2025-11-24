@@ -95,7 +95,7 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- 🧪 Test Dependencies -->
+        <!-- 🧪 Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -106,12 +106,6 @@
 
     <build>
         <plugins>
-
-            <!-- 🚀 Spring Boot Packaging Plugin -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
 
             <!-- ☕ Java Compiler Plugin (JAVA 17) -->
             <plugin>
@@ -125,6 +119,20 @@
                         <arg>-parameters</arg>
                     </compilerArgs>
                 </configuration>
+            </plugin>
+
+            <!-- 🚀 Spring Boot Packaging Plugin -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal> <!-- REQUIRED FOR EXECUTABLE JAR -->
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>
