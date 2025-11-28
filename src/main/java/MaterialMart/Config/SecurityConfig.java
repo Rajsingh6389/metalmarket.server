@@ -17,17 +17,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
-    private final JwtUtil jwtUtil;
+    private final JwtFilter jwtFilter;   // <-- Inject component
     private final UserDetailsServiceImpl userDetailsService;
 
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtUtil jwtUtil) {
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService,
+                          JwtFilter jwtFilter) {
         this.userDetailsService = userDetailsService;
-        this.jwtUtil = jwtUtil;
-    }
-
-    @Bean
-    public JwtFilter jwtFilter() {
-        return new JwtFilter(jwtUtil);
+        this.jwtFilter = jwtFilter;
     }
 
     @Bean
@@ -35,7 +31,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // Authentication provider (links UserDetailsService + PasswordEncoder)
     @Bean
     public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -52,13 +47,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // ✅ Enable CORS so it uses your CorsConfig.java
                 .cors(Customizer.withDefaults())
-
-                // ❌ Disable CSRF for stateless APIs
                 .csrf(csrf -> csrf.disable())
-
-                // ✅ Allow only these endpoints publicly
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/auth/**",
@@ -68,15 +58,11 @@ public class SecurityConfig {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-
-                // ✅ Set JWT-based stateless session
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                // ✅ Link authentication provider
                 .authenticationProvider(authProvider());
 
-        // ✅ Add JWT filter before UsernamePasswordAuthenticationFilter
-        http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+        // Add JWT filter injected from Spring context
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
