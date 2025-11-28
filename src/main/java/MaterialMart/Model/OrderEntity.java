@@ -22,5 +22,6 @@ public class OrderEntity {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")  
     private List<OrderItem> orderItems;
 }
