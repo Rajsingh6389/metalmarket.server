@@ -29,24 +29,35 @@ public class JwtFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
+        System.out.println("🟦 JwtFilter: Incoming request → " + request.getRequestURI());
+
         String header = request.getHeader("Authorization");
+        System.out.println("🟦 JwtFilter: Authorization header = " + header);
 
         if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
+
             String token = header.substring(7);
+            System.out.println("🟦 JwtFilter: Extracted Token = " + token);
 
             if (jwtUtil.validateToken(token)) {
-                String username = jwtUtil.getUsername(token);
 
-                // No role restriction — any active token is valid
+                String username = jwtUtil.getUsername(token);
+                System.out.println("🟩 JwtFilter: Token VALID. Username = " + username);
+
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(
                                 username,
                                 null,
-                                List.of()  // no roles
+                                List.of()   // No roles needed
                         );
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
+
+            } else {
+                System.out.println("🟥 JwtFilter: Token INVALID ❌");
             }
+        } else {
+            System.out.println("🟥 JwtFilter: No token provided");
         }
 
         filterChain.doFilter(request, response);
