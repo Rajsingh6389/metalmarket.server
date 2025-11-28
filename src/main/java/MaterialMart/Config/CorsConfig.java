@@ -21,8 +21,7 @@ public class CorsConfig {
                                  "https://www.metalmarketin.in",
                                 "https://metalmarketin.com",
                                  "https://www.metalmarketin.com",
-                                "https://metalmarketserver-production.up.railway.app",
-                            "https://metalmarket-server-jeha.onrender.com"
+                              
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
