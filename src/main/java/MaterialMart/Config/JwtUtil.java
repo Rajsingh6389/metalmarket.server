@@ -1,4 +1,5 @@
 package MaterialMart.Config;
+
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,10 +17,10 @@ public class JwtUtil {
     private long jwtExpirationMs;
 
     private Key key() {
-        // key length from secret (must be sufficiently long)
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
-    public Key getKey(){
+
+    public Key getKey() {
         return key();
     }
 
@@ -34,8 +35,21 @@ public class JwtUtil {
     }
 
     public String getUsername(String token) {
-        return Jwts.parserBuilder().setSigningKey(key()).build()
-                .parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+
+    // ✅ THIS WAS MISSING — REQUIRED FOR ROLE EXTRACTION
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     public boolean validateToken(String token) {
