@@ -14,14 +14,16 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOriginPatterns(   // 🔥 IMPORTANT FIX FOR RENDER
+                        .allowedOrigins(
                                 "http://localhost:5173",
                                 "https://arsh341.netlify.app",
                                 "https://metalmarketin.in",
                                 "https://www.metalmarketin.in",
                                 "https://metalmarketin.com",
-                                "https://www.metalmarketin.com",
-                                "https://metalmarket-server-jeha.onrender.com"
+                                "https://www.metalmarketin.com"
+                        )
+                        .allowedOriginPatterns(
+                                "https://*.onrender.com"   // 🔥 Render backend
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
