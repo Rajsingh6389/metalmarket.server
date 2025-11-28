@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
-    private final JwtFilter jwtFilter;   // <-- Inject component
+    private final JwtFilter jwtFilter;
     private final UserDetailsServiceImpl userDetailsService;
 
     public SecurityConfig(UserDetailsServiceImpl userDetailsService,
@@ -46,6 +46,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
@@ -56,12 +57,16 @@ public class SecurityConfig {
                                 "/health",
                                 "/h2-console/**"
                         ).permitAll()
+
+                        // 🔥 NOW ORDERS REQUIRE AUTH (JWT)
+                        .requestMatchers("/api/orders/**").authenticated()
+
+                        // Any other request requires auth
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider());
 
-        // Add JWT filter injected from Spring context
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
