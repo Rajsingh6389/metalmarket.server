@@ -14,19 +14,19 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins(
+                        .allowedOriginPatterns(   // 🔥 IMPORTANT FIX FOR RENDER
                                 "http://localhost:5173",
                                 "https://arsh341.netlify.app",
                                 "https://metalmarketin.in",
-                                 "https://www.metalmarketin.in",
+                                "https://www.metalmarketin.in",
                                 "https://metalmarketin.com",
-                                 "https://www.metalmarketin.com"
-                              
+                                "https://www.metalmarketin.com",
+                                "https://metalmarket-server-jeha.onrender.com"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true)
-                        .maxAge(3600); // Cache preflight response for 1 hour
+                        .maxAge(3600);
             }
         };
     }
