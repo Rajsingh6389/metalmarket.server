@@ -20,7 +20,7 @@ public class CorsConfig {
                                 "https://metalmarketin.in",
                                  "https://www.metalmarketin.in",
                                 "https://metalmarketin.com",
-                                 "https://www.metalmarketin.com",
+                                 "https://www.metalmarketin.com"
                               
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
